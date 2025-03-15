@@ -3,11 +3,9 @@ exports.successResponse = async ({
   responseDetails = {},
   response_data = null,
   status = 200,
-  new_access_token = null,
 }) => {
   const responseFormat = {
     status: "SUCCESS",
-    new_access_token,
     response_data,
     message: responseDetails.message || null,
     code: responseDetails.code || null,
