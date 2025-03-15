@@ -17,7 +17,43 @@ exports.createAlbumService = async (db, data, res) => {
 
 exports.getAllAlbumService = async (db) => {
   try {
-    let result = await db.find();
+    let result = await db.aggregate([
+      {
+        $lookup: {
+          from: "songs",
+          let: { albumId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$$albumId", "$album_id"],
+                },
+              },
+            },
+            {
+              $group: {
+                _id: "$album_id",
+                count: { $sum: 1 },
+                duration: { $sum: "$song_duration" },
+                size: { $sum: "$alb_size" },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+              },
+            },
+          ],
+          as: "result",
+        },
+      },
+      {
+        $unwind: {
+          path: "$result",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ]);
     return result;
   } catch (err) {
     throw new Error(err);

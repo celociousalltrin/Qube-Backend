@@ -1,4 +1,5 @@
 const songModel = require("../models/songModel");
+const albumModel = require("../models/albumModel");
 const { successResponse, errorResponse } = require("../utils/responseHandler");
 const { responseMessage } = require("../utils/responseMessage");
 const {
@@ -10,7 +11,7 @@ exports.get_songs_by_album = [
   async (req, res) => {
     try {
       const { album_id } = req.params;
-      const result = await getSongsByAlbum(songModel, album_id);
+      const result = await getSongsByAlbum(albumModel, album_id);
       return successResponse({
         res,
         response_data: result,
