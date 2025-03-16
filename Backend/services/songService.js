@@ -28,8 +28,34 @@ exports.getSongsByAlbum = async (db, id) => {
       {
         $lookup: {
           from: "songs",
-          localField: "_id",
-          foreignField: "album_id",
+          let: {
+            albumId: "$_id",
+            artistName: "$artist_name",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$$albumId", "$album_id"],
+                },
+              },
+            },
+            {
+              $addFields: {
+                song_performer_name: {
+                  $cond: {
+                    if: {
+                      $eq: ["$$artistName", "$song_performer_name"],
+                    },
+                    then: "$$artistName",
+                    else: {
+                      $concat: ["$$artistName", ",", "$song_performer_name"],
+                    },
+                  },
+                },
+              },
+            },
+          ],
           as: "songs_list",
         },
       },
@@ -64,7 +90,7 @@ exports.getSongsByAlbum = async (db, id) => {
         },
       },
     ]);
-    return songList;
+    return songList[0];
   } catch (err) {
     console.log("🚀 ~ exports.getSongsByAlbum= ~ err:", err);
     throw new Error(err);
