@@ -39,6 +39,13 @@ exports.getAllAlbumService = async (db) => {
               },
             },
             {
+              $addFields: {
+                size: {
+                  $round: ["$size", 2],
+                },
+              },
+            },
+            {
               $project: {
                 _id: 0,
               },

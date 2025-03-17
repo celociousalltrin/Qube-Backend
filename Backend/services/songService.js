@@ -79,6 +79,13 @@ exports.getSongsByAlbum = async (db, id) => {
                 duration: { $sum: "$song_duration" },
               },
             },
+            {
+              $addFields: {
+                size: {
+                  $round: ["$size", 2],
+                },
+              },
+            },
           ],
           as: "meta_song_data",
         },

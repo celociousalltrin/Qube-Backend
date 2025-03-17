@@ -2,6 +2,8 @@ const responseData = [
   { code: "OK001", message: "Album Created Successfully" },
   { code: "OK002", message: "Song Created Successfully" },
   { code: "OK003", message: "Song deleted Successfully" },
+  { code: "OK004", message: "Server is Started" },
+  { code: "ER998", message: "Timeout Error Please Try again latter" },
   { code: "ER999", message: "Something Went Wrong" },
   {
     code: "ER902",
